@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LinkedIn → Notion</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #0f0f0f;
+      --surface: #1a1a1a;
+      --border: #2a2a2a;
+      --accent: #0a66c2;
+      --accent-hover: #0856a8;
+      --success: #1e7e34;
+      --success-bg: #0d2b12;
+      --error: #c0392b;
+      --error-bg: #2b0d0d;
+      --text: #f0f0f0;
+      --muted: #888;
+      --input-bg: #141414;
+      --notion: #ffffff;
+    }
+
+    body {
+      width: 320px;
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13px;
+    }
+
+    header {
+      padding: 14px 16px 12px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-wrap {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .li-badge {
+      background: var(--accent);
+      color: white;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      letter-spacing: 0.03em;
+    }
+
+    .arrow {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .notion-badge {
+      background: #fff;
+      color: #000;
+      font-weight: 700;
+      font-size: 11px;
+      padding: 2px 6px;
+      border-radius: 3px;
+      letter-spacing: 0.03em;
+    }
+
+    header span.title {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: 11px;
+    }
+
+    .setup-section, .form-section {
+      padding: 14px 16px;
+    }
+
+    .setup-section {
+      border-bottom: 1px solid var(--border);
+    }
+
+    label {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 500;
+      margin-bottom: 5px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    input[type="text"], input[type="password"], select, textarea {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      padding: 8px 10px;
+      outline: none;
+      transition: border-color 0.15s;
+      appearance: none;
+    }
+
+    input[type="text"]:focus,
+    input[type="password"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--accent);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 56px;
+    }
+
+    select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23888'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      padding-right: 28px;
+    }
+
+    .field {
+      margin-bottom: 10px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .save-btn {
+      width: 100%;
+      margin: 14px 0 0;
+      padding: 10px;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, opacity 0.15s;
+      letter-spacing: 0.01em;
+    }
+
+    .save-btn:hover:not(:disabled) {
+      background: var(--accent-hover);
+    }
+
+    .save-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .save-btn.loading {
+      opacity: 0.7;
+    }
+
+    .toast {
+      margin: 10px 16px 14px;
+      padding: 10px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      display: none;
+    }
+
+    .toast.success {
+      background: var(--success-bg);
+      color: #4ade80;
+      border: 1px solid #166534;
+      display: block;
+    }
+
+    .toast.error {
+      background: var(--error-bg);
+      color: #f87171;
+      border: 1px solid #7f1d1d;
+      display: block;
+    }
+
+    .not-on-linkedin {
+      padding: 32px 16px;
+      text-align: center;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    .not-on-linkedin .icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .setup-toggle {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 11px;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      text-decoration: underline;
+      padding: 0;
+      margin-top: 6px;
+      display: block;
+    }
+
+    .setup-toggle:hover {
+      color: var(--text);
+    }
+
+    .api-key-row {
+      display: flex;
+      gap: 6px;
+    }
+
+    .api-key-row input {
+      flex: 1;
+    }
+
+    .save-key-btn {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      font-family: 'Inter', sans-serif;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 0 10px;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color 0.15s;
+    }
+
+    .save-key-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .key-status {
+      font-size: 11px;
+      margin-top: 5px;
+      color: var(--muted);
+    }
+
+    .key-status.ok {
+      color: #4ade80;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <span class="li-badge">in</span>
+    <span class="arrow">→</span>
+    <span class="notion-badge">N</span>
+  </div>
+  <span class="title">Referral Tracker</span>
+</header>
+
+<!-- API Key Setup -->
+<div class="setup-section" id="setupSection" style="display:none;">
+  <div class="field">
+    <label>Notion API Key</label>
+    <input type="password" id="apiKeyInput" placeholder="ntn_xxxxxxxxxxxx" />
+  </div>
+  <div class="field" style="margin-top: 10px;">
+    <label>Notion Database ID</label>
+    <input type="text" id="dbIdInput" placeholder="5c123456abca123b82e117ff630085fd" />
+  </div>
+  <button class="save-key-btn" id="saveKeyBtn" style="width: 100%; margin-top: 10px; padding: 8px;">Save Settings</button>
+  <div class="key-status" id="keyStatus"></div>
+</div>
+
+<!-- Not on a LinkedIn profile -->
+<div class="not-on-linkedin" id="notLinkedIn" style="display:none;">
+  <div class="icon">🔗</div>
+  <strong>Open a LinkedIn profile</strong><br />
+  Navigate to someone's LinkedIn profile page, then click this extension.
+</div>
+
+<!-- Main form -->
+<div class="form-section" id="formSection" style="display:none;">
+  <div class="field">
+    <label>Name</label>
+    <input type="text" id="nameInput" placeholder="Full name" />
+  </div>
+  <div class="row">
+    <div class="field">
+      <label>Company</label>
+      <input type="text" id="companyInput" placeholder="Company name" />
+    </div>
+    <div class="field">
+      <label>Status</label>
+      <select id="statusSelect">
+        <option value="To Connect">To Connect</option>
+        <option value="Request Sent" selected>Request Sent</option>
+        <option value="Connected">Connected</option>
+        <option value="DM Sent">DM Sent</option>
+        <option value="Replied">Replied</option>
+        <option value="No Response">No Response</option>
+      </select>
+    </div>
+  </div>
+  <div class="field">
+    <label>LinkedIn URL</label>
+    <input type="text" id="urlInput" placeholder="https://linkedin.com/in/..." />
+  </div>
+  <div class="field">
+    <label>Notes</label>
+    <textarea id="notesInput" placeholder="Optional notes..."></textarea>
+  </div>
+
+  <button class="save-btn" id="saveBtn">Save to Notion</button>
+  <button class="setup-toggle" id="toggleSetup">⚙ API settings</button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="popup.js"></script>
+</body>
+</html>
