@@ -1,9 +1,9 @@
-# Privacy Policy for clipIn: Referral Tracker for LinkedIn w/ Notion
+# Privacy Policy for clipIn: LinkedIn Referral Tracker w/ Notion
 
 **Last updated:** October 2026
 
 ## 1. Overview
-**clipIn: Referral Tracker for LinkedIn w/ Notion** ("the extension") is designed with privacy as a foundational principle. The extension does not collect, log, track, sell, or transmit any personal data to developer-owned servers, advertising networks, or third-party analytics platforms.
+**clipIn: LinkedIn Referral Tracker w/ Notion** ("the extension") is designed with privacy as a foundational principle. The extension does not collect, log, track, sell, or transmit any personal data to developer-owned servers, advertising networks, or third-party analytics platforms.
 
 ## 2. Information Accessed & Used
 * **LinkedIn Profile Data:** When you explicitly open the extension popup while browsing a LinkedIn profile page (`https://www.linkedin.com/in/*`), the extension reads the profile's publicly visible text (Name, Company, and Profile URL) solely to pre-populate the input fields in the extension popup.

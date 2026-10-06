@@ -1,4 +1,4 @@
-# LinkedIn → Notion Referral Tracker
+# clipIn: LinkedIn Referral Tracker w/ Notion
 
 A Chrome/Firefox extension that lets you save a LinkedIn profile directly to your Notion **Referral Contacts** database in one click.
 
