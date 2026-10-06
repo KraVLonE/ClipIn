@@ -78,22 +78,31 @@ dbIdInput.addEventListener('input', () => {
 });
 
 // ─── Helper: send message with timeout ────────────────────────────────────────
-function sendMessageToTab(tabId, msg) {
-  return new Promise((resolve) => {
-    try {
-      ext.tabs.sendMessage(tabId, msg, (response) => {
-        if (ext.runtime.lastError) {
-          resolve(null);
-        } else {
-          resolve(response);
+async function sendMessageToTab(tabId, msg) {
+  try {
+    const sendPromise = new Promise((resolve) => {
+      try {
+        const res = ext.tabs.sendMessage(tabId, msg, (response) => {
+          if (ext.runtime && ext.runtime.lastError) {
+            resolve(null);
+          } else {
+            resolve(response);
+          }
+        });
+        // In Firefox / Promise-supporting environments, handle promise rejection
+        if (res && typeof res.catch === 'function') {
+          res.then(resolve).catch(() => resolve(null));
         }
-      });
-    } catch (e) {
-      resolve(null);
-    }
-    // Timeout fallback — if no response in 4s, give up
-    setTimeout(() => resolve(null), 4000);
-  });
+      } catch (e) {
+        resolve(null);
+      }
+    });
+
+    const timeoutPromise = new Promise((resolve) => setTimeout(() => resolve(null), 4000));
+    return await Promise.race([sendPromise, timeoutPromise]);
+  } catch (e) {
+    return null;
+  }
 }
 
 function sleep(ms) {
@@ -201,3 +210,4 @@ function showToast(msg, type) {
   toast.className = `toast ${type}`;
   setTimeout(() => { toast.className = 'toast'; }, 5000);
 }
+
