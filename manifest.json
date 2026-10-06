@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "clipIn: Referral Tracker for LinkedIn w/ Notion",
+  "name": "clipIn: LinkedIn Referral Tracker w/ Notion",
   "version": "1.2",
   "description": "Save LinkedIn profiles to your Notion Referral Contacts database in one click.",
   "icons": {
